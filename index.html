@@ -3,686 +3,800 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leveler Audio | Modern Audio Production</title>
+    <title>LEVELER AUDIO | MODERN AUDIO PRODUCTION</title>
     
-    <!-- OPTIMIZATION 1: Preconnect to Spotify and Google Fonts for faster connection -->
+    <!-- PRELOAD -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://open.spotify.com">
     
-    <!-- OPTIMIZATION 2: Actual Font Import (High Fidelity) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-
-    <!-- FAVICON (If you have one) -->
-    <!-- <link rel="icon" type="image/png" href="favicon.png"> -->
+    <!-- FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- CSS VARIABLES & RESET --- */
+        /* --- 0. SYSTEM CONFIGURATION --- */
         :root {
-            --bg-color: #0f0f0f;
-            --card-bg: #1a1a1a;
-            --text-main: #e0e0e0;
-            --text-muted: #a0a0a0;
-            --accent: #d4af37; 
-            --accent-hover: #f3ce5e;
-            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --bg: #050505;
+            --surface: #0a0a0a;
+            --line: #222;
+            --text: #e0e0e0;
+            --dim: #666;
+            --accent: #ccff00; /* ACID LIME */
+            
+            --font-head: 'Syncopate', sans-serif;
+            --font-tech: 'Space Mono', monospace;
+            
+            --sidebar-width: 300px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: var(--font-main);
-            line-height: 1.6;
-            scroll-behavior: smooth;
-            /* Keeps text sharp on Mac/iOS */
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-tech);
+            line-height: 1.5;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden; 
         }
 
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         ul { list-style: none; }
+        img { max-width: 100%; display: block; }
 
-        /* --- LAYOUT UTILITIES --- */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        section {
-            padding: 80px 0;
-            border-bottom: 1px solid #222;
-            position: relative;
-            background-color: var(--bg-color); 
-            z-index: 2; 
-        }
-
-        .section-title {
-            font-size: 2rem;
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-align: center;
-        }
-
-        .section-title span {
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 10px;
-        }
-
-        /* --- HEADER --- */
-        header {
-            background-color: rgba(15, 15, 15, 0.90);
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        nav {
+        /* --- 1. SIDEBAR (Fixed to Left) --- */
+        .sidebar {
+            position: fixed;
+            top: 0; 
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--bg);
+            border-right: 1px solid var(--line);
+            padding: 40px;
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
-            align-items: center;
+            z-index: 1000;
         }
 
-        .logo {
-            font-size: 1.5rem;
+        .brand {
+            font-family: var(--font-head);
             font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent);
-        }
-
-        .hamburger {
-            display: none;
-            cursor: pointer;
             font-size: 1.8rem;
-            color: var(--text-main);
+            letter-spacing: -1px;
+            line-height: 1;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .status-dot {
+            display: inline-block;
+            width: 8px; height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin-left: 5px;
+            box-shadow: 0 0 10px var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        /* Nav Layout */
+        .nav-menu ul { display: flex; flex-direction: column; gap: 20px; }
+
+        .nav-menu a {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            position: relative;
+            padding-left: 0;
+            display: block;
+            font-weight: 700;
+        }
+
+        .nav-menu a:hover {
+            color: var(--accent);
+            transform: translateX(10px);
+        }
+        
+        .nav-menu a::before {
+            content: '//';
+            position: absolute;
+            left: -20px;
+            opacity: 0;
+            color: var(--accent);
+            transition: 0.3s;
+        }
+        .nav-menu a:hover::before { opacity: 1; left: -25px; }
+
+        .sidebar-footer {
+            font-size: 0.65rem;
+            color: var(--dim);
+            border-top: 1px solid var(--line);
+            padding-top: 20px;
+        }
+
+        /* --- 2. MAIN CONTENT (Pushed Right) --- */
+        .main-view {
+            margin-left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            min-height: 100vh;
+            background: var(--bg);
+            position: relative;
         }
 
         /* --- HERO --- */
-        .hero-section {
+        .hero {
+            height: 90vh; 
+            border-bottom: 1px solid var(--line);
             position: relative;
-            padding: 160px 0 120px;
-            border-bottom: none; 
-            margin-bottom: 0; 
-            background: transparent; 
-            z-index: 1; 
+            display: flex;
+            align-items: flex-end;
+            padding: 60px;
+            overflow: hidden;
         }
 
-        .hero-section::before {
-            content: '';
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; 
-            height: 100vh;
-            /* OPTIMIZATION 3: Added query params to image to reduce file size */
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
             background-image: url('https://images.pexels.com/photos/4988141/pexels-photo-4988141.jpeg?auto=compress&cs=tinysrgb&w=1920');
             background-size: cover;
             background-position: center;
-            filter: blur(4px) brightness(0.8);
-            transform: scale(1.0);
+            filter: grayscale(100%) contrast(110%) brightness(0.4);
             z-index: 0;
+        }
+        
+        /* Grid Overlay */
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                linear-gradient(rgba(5,5,5,0) 0%, rgba(5,5,5,1) 100%),
+                repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 100px);
             pointer-events: none;
-        }
-
-        .hero-content {
-            position: relative;
             z-index: 1;
-            text-align: center;
         }
 
-        .hero-content h1 {
-            font-size: 5rem; 
-            margin-bottom: 15px;
-            line-height: 1;
-            font-weight: 800;
-            letter-spacing: -2px;
-            text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+        .hero h1 {
+            font-family: var(--font-head);
+            font-size: 6vw; /* Responsive sizing */
+            line-height: 0.9;
+            text-transform: uppercase;
+            color: white;
+            z-index: 2;
+            position: relative;
+            mix-blend-mode: exclusion;
         }
 
-        .hero-content p {
-            color: #d0d0d0;
+        /* --- WORK (DATA LIST) --- */
+        .section-header {
+            padding: 40px 60px;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface);
+            position: sticky;
+            top: 0;
+            z-index: 50; 
+        }
+
+        .label {
+            font-family: var(--font-head);
             font-size: 1.2rem;
-            max-width: 650px;
-            margin: 0 auto;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
-
-        /* --- PORTFOLIO GRID --- */
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .project-card {
-            background: var(--card-bg);
-            border-radius: 8px;
-            overflow: hidden;
-            /* OPTIMIZATION 4: Removed all transform/will-change properties to save RAM */
-        }
-
-        .embed-container {
-            position: relative;
-            width: 100%;
-            background: #222; 
-            min-height: 200px; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .card-info { 
-            padding: 20px 20px 25px; 
-            text-align: center;
-        }
-        
-        /* Updated typography */
-        .card-info p:first-child { 
             color: var(--accent);
-            font-weight: 600;
-            margin-bottom: 4px;
-            font-size: 1rem;
-        }
-        
-        .card-info p:last-child {
-            color: var(--text-muted); 
-            font-size: 0.9rem; 
+            letter-spacing: 2px;
         }
 
-        /* --- SERVICES (DESKTOP SWAP EFFECT) --- */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
+        .data-list { display: flex; flex-direction: column; }
+
+        .data-row {
+            border-bottom: 1px solid var(--line);
+            background: var(--bg);
+            transition: background 0.2s;
         }
 
-        .service-card {
-            background: var(--card-bg);
-            border: 1px solid #333;
-            border-radius: 8px;
-            height: 240px; 
-            position: relative;
-            overflow: hidden; 
+        .data-row:hover { background: #121212; }
+
+        .row-trigger {
             display: flex;
             align-items: center;
-            justify-content: center;
-            text-align: center;
-            transition: background 0.3s ease;
+            padding: 30px 60px;
+            cursor: pointer;
+            gap: 20px;
         }
 
-        .service-card h3 {
-            margin: 0;
+        .row-id { 
+            color: var(--dim); 
+            font-size: 0.8rem; 
+            width: 40px;
+        }
+        
+        .row-title { 
+            font-weight: 700; 
+            font-size: 1.2rem; 
+            text-transform: uppercase; 
+            flex-grow: 1; 
+        }
+        
+        .row-credits {
+            color: var(--dim);
+            font-weight: 400;
+            display: block;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        .row-meta {
+            font-size: 0.85rem;
+            /* HIGHLIGHTED LOOK: All text is accent color */
+            color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 1px solid var(--line);
+            padding: 10px 15px;
+            border-radius: 2px;
+            white-space: nowrap; 
+            background: rgba(204, 255, 0, 0.05); /* Very faint background tint */
+        }
+
+        .row-icon {
             color: var(--accent);
             font-size: 1.5rem;
-            padding: 20px;
+            transition: transform 0.3s;
+        }
+
+        /* Hidden Player */
+        .row-content {
+            height: 0;
+            overflow: hidden;
+            transition: height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            background: #000;
+            border-left: 4px solid var(--accent);
+        }
+
+        .data-row.active .row-content { height: 160px; }
+        .data-row.active .row-trigger { background: #1a1a1a; }
+        .data-row.active .row-icon { transform: rotate(45deg); }
+
+        /* --- SERVICES (TECHNICAL GRID) --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .service-cell {
+            border-bottom: 1px solid var(--line);
+            border-right: 1px solid var(--line);
+            padding: 80px 60px;
+            transition: 0.3s;
             position: relative;
-            z-index: 2;
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.4s ease, transform 0.4s ease;
         }
+        
+        .service-cell:nth-child(even) { border-right: none; }
 
-        .service-card p {
+        .service-cell:hover { background: var(--surface); }
+        
+        .service-cell::before {
+            content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 30px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            font-size: 1rem;
-            color: #fff;
-            line-height: 1.5;
-        }
-
-        .service-card:hover { background: #222; }
-        .service-card:hover h3 { opacity: 0; transform: translateY(-20px); }
-        .service-card:hover p { opacity: 1; transform: translateY(0); }
-
-        /* --- CONTACT --- */
-        .contact-wrapper { max-width: 600px; margin: 0 auto; }
-        form { display: flex; flex-direction: column; gap: 20px; }
-        input, textarea {
-            background: var(--card-bg);
-            border: 1px solid #333;
-            padding: 15px;
-            color: white;
-            font-family: inherit;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        input:focus, textarea:focus { outline: none; border-color: var(--accent); }
-        button {
+            top: 0; left: 0; width: 0; height: 3px;
             background: var(--accent);
-            color: #000;
-            padding: 15px;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 4px;
             transition: 0.3s;
         }
-        button:hover { background: var(--accent-hover); }
+        .service-cell:hover::before { width: 100%; }
 
-        /* --- FOOTER --- */
-        footer {
-            text-align: center;
-            padding: 40px 0;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            background-color: var(--bg-color); 
-            position: relative;
-            z-index: 2;
-            border-top: 1px solid #222;
+        .service-num {
+            font-family: var(--font-head);
+            font-size: 4rem;
+            color: var(--line);
+            opacity: 0.4;
+            margin-bottom: 20px;
+            position: absolute;
+            top: 40px; right: 40px;
+        }
+
+        .service-cell h3 {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .service-cell p {
+            color: var(--dim);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            max-width: 90%;
+        }
+
+        /* --- CONTACT --- */
+        .contact-area {
+            padding: 100px 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            background-color: var(--surface);
+        }
+
+        .form-box input, .form-box textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--line);
+            padding: 20px 0;
+            color: var(--accent);
+            font-family: var(--font-tech);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        /* Change Placeholder Color */
+        .form-box ::placeholder { color: var(--dim); opacity: 1; }
+
+        .form-box input:focus, .form-box textarea:focus {
+            outline: none;
+            border-bottom-color: var(--accent);
+            background: rgba(204, 255, 0, 0.02);
+            padding-left: 10px;
+        }
+
+        .submit-btn {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 20px 50px;
+            font-family: var(--font-head);
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            width: 100%;
+            letter-spacing: 2px;
+        }
+
+        .submit-btn:hover {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 30px rgba(204, 255, 0, 0.2);
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
         }
 
         /* =========================================
-           MOBILE SPECIFIC STYLES
+           MOBILE OPTIMIZATIONS
            ========================================= */
-        @media (max-width: 768px) {
-            .hero-content h1 { font-size: 3rem; }
-            .hero-section { padding: 100px 0 60px; }
+        @media (max-width: 900px) {
             
-            /* Hamburger Logic */
-            .hamburger { display: block; }
-            .nav-links {
-                position: absolute;
-                top: 70px; 
-                left: 0;
+            /* Sidebar becomes top header */
+            .sidebar {
+                position: relative;
                 width: 100%;
-                background-color: #151515;
-                flex-direction: column;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--line);
+                padding: 25px;
+                flex-direction: row;
                 align-items: center;
-                gap: 0;
-                max-height: 0;
-                overflow: hidden;
-                transition: max-height 0.3s ease;
-                border-bottom: 1px solid #222;
-            }
-            .nav-links.active { max-height: 300px; }
-            .nav-links li { width: 100%; text-align: center; }
-            .nav-links a { display: block; padding: 20px; border-bottom: 1px solid #222; }
-
-            /* --- SERVICES ON MOBILE (Standard Layout) --- */
-            .services-grid { gap: 20px; }
-            .service-card {
-                height: auto;
-                min-height: auto;
-                display: block;
-                padding: 30px 20px;
-                text-align: left;
-            }
-            .service-card h3 {
-                position: static;
-                opacity: 1;
-                transform: none;
-                padding: 0 0 10px 0;
-                text-align: left;
-            }
-            .service-card p {
-                position: static;
-                opacity: 1;
-                transform: none;
-                height: auto;
-                padding: 0;
-                display: block;
-                color: var(--text-muted);
-                text-align: left;
-            }
-            /* Disable hover effects on mobile */
-            .service-card:hover h3 { opacity: 1; transform: none; }
-            .service-card:hover p { opacity: 1; transform: none; }
-
-
-            /* --- PORTFOLIO ON MOBILE (Rectangles List) --- */
-            .portfolio-grid {
-                /* Switch to single column for "List" view */
-                grid-template-columns: 1fr;
-                gap: 30px;
             }
 
-            .project-card {
-                /* Ensure full width rectangles */
+            /* Hide extended nav items on mobile header for cleanliness */
+            .nav-menu, .sidebar-footer, .meta-block { display: none; }
+            
+            /* Add status dot back */
+            .status-dot { margin-left: auto; }
+
+            /* Full width content */
+            .main-view {
+                margin-left: 0;
                 width: 100%;
-                display: block;
-                margin-bottom: 10px;
+                border-right: none;
             }
 
-            .embed-container {
-                /* Ensure player is always visible */
-                display: flex;
+            /* Hero Text scaling */
+            .hero { padding: 30px; height: 50vh; }
+            .hero h1 { font-size: 3.5rem; }
+
+            /* Portfolio List Mobile */
+            .section-header { padding: 25px; font-size: 0.9rem; }
+            .row-trigger {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 25px;
+                gap: 15px;
+                position: relative;
+            }
+            .row-id { display: none; }
+            .row-icon {
+                position: absolute;
+                top: 25px; right: 25px;
+            }
+            .row-meta {
+                align-self: flex-start;
+                font-size: 0.75rem;
+                background: transparent;
+                padding: 0;
+                border: none;
+            }
+            
+            /* Services Stack */
+            .services-grid { grid-template-columns: 1fr; }
+            .service-cell { 
+                border-right: none; 
+                padding: 50px 30px;
+            }
+            .service-num { font-size: 3rem; top: 30px; right: 30px; }
+            
+            /* Contact Stack */
+            .contact-area { 
+                grid-template-columns: 1fr; 
+                padding: 50px 30px; 
+                gap: 30px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <nav>
-                <!-- OPTIMIZATION 5: href="." clears the hash and reloads home -->
-                <a href="." class="logo">LEVELER<span style="color:var(--accent)">AUDIO</span></a>
-                
-                <div class="hamburger" onclick="toggleMenu()">&#9776;</div>
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="#portfolio" onclick="toggleMenu()">Work</a></li>
-                    <li><a href="#services" onclick="toggleMenu()">Services</a></li>
-                    <li><a href="#contact" onclick="toggleMenu()">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+<!-- SIDEBAR (Fixed Left) -->
+<aside class="sidebar">
+    <div class="brand-block">
+        <!-- Re-links to home -->
+        <a href="." class="brand">LEVELER<br>AUDIO</a>
+    </div>
+    <span class="status-dot"></span>
 
-    <!-- HERO SECTION (Fixed Background) -->
-    <section class="hero-section">
-        <div class="container hero-content">
-            <h1>Sonic Precision.</h1>
-            <p>Professional Mixing, Mastering, and Post-Production tailored to your sound.</p>
-        </div>
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="#work">LATEST WORK</a></li>
+            <li><a href="#services">SERVICES</a></li>
+            <li><a href="#contact">CONTACT US</a></li>
+        </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+        &copy; 2026 LEVELER AUDIO
+    </div>
+</aside>
+
+<!-- MAIN CONTENT (Pushed Right) -->
+<main class="main-view">
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <h1>
+            Sonic<br>
+            <span>Precision.</span>
+        </h1>
     </section>
 
-    <!-- Portfolio Grid Section -->
-    <section id="portfolio">
-        <div class="container">
-            <div class="section-title"><span>Latest Work</span></div>
-
-            <div class="portfolio-grid">
-                
-                <!-- Card 1 -->
-                <div class="project-card">
-                    <div class="embed-container">
-                        <div class="spotify-embed" data-uri="spotify:track:09Zd2edvykjoOwkL8ETK4y"></div>
-                    </div>
-                    <div class="card-info">
-                        <p>Mixed / Mastered</p>
-                        <p>Jörg-Erik Hanikat</p>
-                    </div>
-                </div>
-				
-				<!-- Card 2 -->
-                <div class="project-card">
-                    <div class="embed-container">
-                        <div class="spotify-embed" data-uri="spotify:track:67s2ezmWmmmPAoxteKergR"></div>
-                    </div>
-                    <div class="card-info">
-                        <p>Mixed</p>
-                        <p>Martin Randalu</p>
-                    </div>
-                </div>
-                
-                <!-- Card 3 -->
-                <div class="project-card">
-                    <div class="embed-container">
-                        <div class="spotify-embed" data-uri="spotify:track:3nj9cRRWUHQddwl0ZCn3ri"></div>
-                    </div>
-                    <div class="card-info">
-                        <p>Recorded / Produced / Mixed</p>
-                        <p>Jörg-Erik Hanikat</p>
-                    </div>
-                </div>
-                
-                <!-- Card 4 -->
-                <div class="project-card">
-                    <div class="embed-container">
-                        <div class="spotify-embed" data-uri="spotify:track:3EyPQypQd1HoScl517wyvC"></div>
-                    </div>
-                    <div class="card-info">
-                        <p>Recorded / Produced / Mixed / Mastered</p>
-                        <p>Jörg-Erik Hanikat</p>
-                    </div>
-                </div>
-                
-                <!-- Card 5 -->
-                <div class="project-card">
-                    <div class="embed-container">
-                        <div class="spotify-embed" data-uri="spotify:track:5uWnzCZSpaS0KqFpp6Nbjz"></div>
-                    </div>
-                    <div class="card-info">
-                        <p>Mastered</p>
-                        <p>Martin Randalu</p>
-                    </div>
-                </div>
-
-                <!-- Card 6 -->
-                <div class="project-card">
-                    <div class="embed-container">
-                        <div class="spotify-embed" data-uri="spotify:track:3bvQmVs1WeeMq5bwCugZnL"></div>
-                    </div>
-                    <div class="card-info">
-                        <p>Mixed</p>
-                        <p>Martin Randalu</p>
-                    </div>
-                </div>
-                
-                <!-- Card 7 -->
-                <div class="project-card">
-                    <div class="embed-container">
-                        <div class="spotify-embed" data-uri="spotify:track:3o04n5EbGnWpdJlcb03ap2"></div>
-                    </div>
-                    <div class="card-info">
-                        <p>Mastered</p>
-                        <p>Martin Randalu</p>
-                    </div>
-                </div>
-                
-                <!-- Card 8 -->
-                <div class="project-card">
-                    <div class="embed-container">
-                        <div class="spotify-embed" data-uri="spotify:track:2eYNfzBPp0ahVYHMNiP9yK"></div>
-                    </div>
-                    <div class="card-info">
-                        <p>Mixed</p>
-                        <p>Jörg-Erik Hanikat</p>
-                    </div>
-                </div>
-                
-                <!-- Card 9 -->
-                <div class="project-card">
-                    <div class="embed-container">
-                        <div class="spotify-embed" data-uri="spotify:track:4NyOCGz9E3sru0YshzAikj"></div>
-                    </div>
-                    <div class="card-info">
-                        <p>Mixed / Mastered</p>
-                        <p>Martin Randalu</p>
-                    </div>
-                </div>
-                
-                <!-- Card 10 -->
-                <div class="project-card">
-                    <div class="embed-container">
-                        <div class="spotify-embed" data-uri="spotify:track:6uZJGCqNAaIhfBmxH3Wus0"></div>
-                    </div>
-                    <div class="card-info">
-                        <p>Mixed / Mastered</p>
-                        <p>Jörg-Erik Hanikat</p>
-                    </div>
-                </div>
-                
-                <!-- Card 11 -->
-                <div class="project-card">
-                    <div class="embed-container">
-                        <div class="spotify-embed" data-uri="spotify:track:1yyuZv1L3tmi1QeEL4CBAR"></div>
-                    </div>
-                    <div class="card-info">
-                        <p>Recorded / Produced/ Mixed</p>
-                        <p>Jörg-Erik Hanikat</p>
-                    </div>
-                </div>
-                
-                <!-- Card 12 -->
-                <div class="project-card">
-                    <div class="embed-container">
-                        <div class="spotify-embed" data-uri="spotify:track:1UzSiTbiX3Yryk2IPLXdb2"></div>
-                    </div>
-                    <div class="card-info">
-                        <p>Mixed / Mastered</p>
-                        <p>Martin Randalu</p>
-                    </div>
-                </div>
-				
-				<!-- Card 13 -->
-                <div class="project-card">
-                    <div class="embed-container">
-                        <div class="spotify-embed" data-uri="spotify:track:3yRT9HfAZG7knZ77TnuCqO"></div>
-                    </div>
-                    <div class="card-info">
-                        <p>Mastered</p>
-                        <p>Martin Randalu</p>
-                    </div>
-                </div>
-				
-				<!-- Card 14 -->
-                <div class="project-card">
-                    <div class="embed-container">
-                        <div class="spotify-embed" data-uri="spotify:track:6yT7V6FwLbNMRE2mPGWNk5"></div>
-                    </div>
-                    <div class="card-info">
-                        <p>Recorded / Produced / Mixed / Mastered</p>
-                        <p>Jörg-Erik Hanikat</p>
-                    </div>
-                </div>
-                
-                <!-- Card 15 -->
-                <div class="project-card">
-                    <div class="embed-container">
-                        <div class="spotify-embed" data-uri="spotify:track:6Xobucdoxisw1a4qnSc7Jd"></div>
-                    </div>
-                    <div class="card-info">
-                        <p>Recorded / Produced / Mixed / Mastered</p>
-                        <p>Jörg-Erik Hanikat</p>
-                    </div>
-                </div>
-                
-                <!-- Card 16 -->
-                <div class="project-card">
-                    <div class="embed-container">
-                        <div class="spotify-embed" data-uri="spotify:track:5WfB3dyYAIYxLg6madf8UG"></div>
-                    </div>
-                    <div class="card-info">
-                        <p>Recorded / Produced / Mixed / Mastered</p>
-                        <p>Jörg-Erik Hanikat</p>
-                    </div>
-                </div>
-
-            </div>
+    <!-- WORK (DATA LIST) -->
+    <section id="work">
+        <div class="section-header">
+            <span class="label">LATEST WORK</span>
+            <span style="color:var(--dim); font-size: 0.8rem;">//</span>
         </div>
-    </section>
 
-    <!-- Services Section -->
-    <section id="services">
-        <div class="container">
-            <div class="section-title"><span>Services</span></div>
+        <div class="data-list">
             
-            <div class="services-grid">
-                <div class="service-card">
-                    <h3>Mixing</h3>
-                    <p>Balancing your tracks to achieve clarity, depth, and punch. We ensure every element sits perfectly in the stereo field.</p>
+            <!-- ITEM 01 -->
+            <div class="data-row" onclick="toggleRow(this)">
+                <div class="row-trigger">
+                    <span class="row-id">01</span>
+                    <div class="row-title">Geko - "Ära Jahtu"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
+                    <div class="row-meta">MIXED / MASTERED</div>
+                    <div class="row-icon">+</div>
                 </div>
-                <div class="service-card">
-                    <h3>Mastering</h3>
-                    <p>The final polish. We optimize loudness and frequency balance to ensure your tracks translate perfectly across all streaming platforms and physical media.</p>
-                </div>
-				<div class="service-card">
-                    <h3>Post Production</h3>
-                    <p>Audio repair, dialogue editing, and sound design for video, podcasts, and film projects.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Ghost Writing</h3>
-                    <p>Professional composition and lyrical assistance tailored to your artistic vision. From melodic hooks to full arrangements, we help articulate your musical identity while remaining completely behind the scenes.</p>
+                <div class="row-content">
+                    <div class="spotify-embed" data-uri="spotify:track:09Zd2edvykjoOwkL8ETK4y"></div>
                 </div>
             </div>
+
+            <!-- ITEM 02 -->
+            <div class="data-row" onclick="toggleRow(this)">
+                <div class="row-trigger">
+                    <span class="row-id">02</span>
+                    <div class="row-title">Rainer Ild - "ginger goes black"<br><span class="row-credits">Martin Randalu</span></div>
+                    <div class="row-meta">MIXED</div>
+                    <div class="row-icon">+</div>
+                </div>
+                <div class="row-content">
+                    <div class="spotify-embed" data-uri="spotify:track:67s2ezmWmmmPAoxteKergR"></div>
+                </div>
+            </div>
+
+            <!-- ITEM 03 -->
+            <div class="data-row" onclick="toggleRow(this)">
+                <div class="row-trigger">
+                    <span class="row-id">03</span>
+                    <div class="row-title">bloodfeather - "Closer Enemy"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
+                    <div class="row-meta">REC / PROD / MIX</div>
+                    <div class="row-icon">+</div>
+                </div>
+                <div class="row-content">
+                    <div class="spotify-embed" data-uri="spotify:track:3nj9cRRWUHQddwl0ZCn3ri"></div>
+                </div>
+            </div>
+
+            <!-- ITEM 04 -->
+            <div class="data-row" onclick="toggleRow(this)">
+                <div class="row-trigger">
+                    <span class="row-id">04</span>
+                    <div class="row-title">Leaf This Planet - "Can You Hear Me?"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
+                    <div class="row-meta">REC / PROD / MIX / MAST</div>
+                    <div class="row-icon">+</div>
+                </div>
+                <div class="row-content">
+                    <div class="spotify-embed" data-uri="spotify:track:3EyPQypQd1HoScl517wyvC"></div>
+                </div>
+            </div>
+
+            <!-- ITEM 05 -->
+            <div class="data-row" onclick="toggleRow(this)">
+                <div class="row-trigger">
+                    <span class="row-id">05</span>
+                    <div class="row-title">Lenna - "Maailmalõpu eel"<br><span class="row-credits">Martin Randalu</span></div>
+                    <div class="row-meta">MASTERED</div>
+                    <div class="row-icon">+</div>
+                </div>
+                <div class="row-content">
+                    <div class="spotify-embed" data-uri="spotify:track:5uWnzCZSpaS0KqFpp6Nbjz"></div>
+                </div>
+            </div>
+
+            <!-- ITEM 06 -->
+            <div class="data-row" onclick="toggleRow(this)">
+                <div class="row-trigger">
+                    <span class="row-id">06</span>
+                    <div class="row-title">Horror Dance Squad - "Take Aim"<br><span class="row-credits">Martin Randalu</span></div>
+                    <div class="row-meta">MIXED</div>
+                    <div class="row-icon">+</div>
+                </div>
+                <div class="row-content">
+                    <div class="spotify-embed" data-uri="spotify:track:3bvQmVs1WeeMq5bwCugZnL"></div>
+                </div>
+            </div>
+
+             <!-- ITEM 07 -->
+             <div class="data-row" onclick="toggleRow(this)">
+                <div class="row-trigger">
+                    <span class="row-id">07</span>
+                    <div class="row-title">Ketaspidur - "Tragöödia"<br><span class="row-credits">Martin Randalu</span></div>
+                    <div class="row-meta">MASTERED</div>
+                    <div class="row-icon">+</div>
+                </div>
+                <div class="row-content">
+                    <div class="spotify-embed" data-uri="spotify:track:3o04n5EbGnWpdJlcb03ap2"></div>
+                </div>
+            </div>
+
+             <!-- ITEM 08 -->
+             <div class="data-row" onclick="toggleRow(this)">
+                <div class="row-trigger">
+                    <span class="row-id">08</span>
+                    <div class="row-title">Goresoerd - "Maokaev"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
+                    <div class="row-meta">MIXED</div>
+                    <div class="row-icon">+</div>
+                </div>
+                <div class="row-content">
+                    <div class="spotify-embed" data-uri="spotify:track:2eYNfzBPp0ahVYHMNiP9yK"></div>
+                </div>
+            </div>
+
+             <!-- ITEM 09 -->
+             <div class="data-row" onclick="toggleRow(this)">
+                <div class="row-trigger">
+                    <span class="row-id">09</span>
+                    <div class="row-title">Fööniks - "Metsik"<br><span class="row-credits">Martin Randalu</span></div>
+                    <div class="row-meta">MIXED / MASTERED</div>
+                    <div class="row-icon">+</div>
+                </div>
+                <div class="row-content">
+                    <div class="spotify-embed" data-uri="spotify:track:4NyOCGz9E3sru0YshzAikj"></div>
+                </div>
+            </div>
+
+             <!-- ITEM 10 -->
+             <div class="data-row" onclick="toggleRow(this)">
+                <div class="row-trigger">
+                    <span class="row-id">10</span>
+                    <div class="row-title">Pizzafacial - "Disco Disaster"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
+                    <div class="row-meta">MIXED / MASTERED</div>
+                    <div class="row-icon">+</div>
+                </div>
+                <div class="row-content">
+                    <div class="spotify-embed" data-uri="spotify:track:6uZJGCqNAaIhfBmxH3Wus0"></div>
+                </div>
+            </div>
+
+             <!-- ITEM 11 -->
+             <div class="data-row" onclick="toggleRow(this)">
+                <div class="row-trigger">
+                    <span class="row-id">11</span>
+                    <div class="row-title">Pridian - "Hive Mind"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
+                    <div class="row-meta">REC / PROD / MIX</div>
+                    <div class="row-icon">+</div>
+                </div>
+                <div class="row-content">
+                    <div class="spotify-embed" data-uri="spotify:track:1yyuZv1L3tmi1QeEL4CBAR"></div>
+                </div>
+            </div>
+
+             <!-- ITEM 12 -->
+             <div class="data-row" onclick="toggleRow(this)">
+                <div class="row-trigger">
+                    <span class="row-id">12</span>
+                    <div class="row-title">Tanel Padar - "Mustad purjed"<br><span class="row-credits">Martin Randalu</span></div>
+                    <div class="row-meta">MIXED / MASTERED</div>
+                    <div class="row-icon">+</div>
+                </div>
+                <div class="row-content">
+                    <div class="spotify-embed" data-uri="spotify:track:1UzSiTbiX3Yryk2IPLXdb2"></div>
+                </div>
+            </div>
+
+             <!-- ITEM 13 -->
+             <div class="data-row" onclick="toggleRow(this)">
+                <div class="row-trigger">
+                    <span class="row-id">13</span>
+                    <div class="row-title">Ocean Districts - "Fata Morgana"<br><span class="row-credits">Martin Randalu</span></div>
+                    <div class="row-meta">MASTERED</div>
+                    <div class="row-icon">+</div>
+                </div>
+                <div class="row-content">
+                    <div class="spotify-embed" data-uri="spotify:track:3yRT9HfAZG7knZ77TnuCqO"></div>
+                </div>
+            </div>
+
+             <!-- ITEM 14 -->
+             <div class="data-row" onclick="toggleRow(this)">
+                <div class="row-trigger">
+                    <span class="row-id">14</span>
+                    <div class="row-title">bloodfeather - "Ashes"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
+                    <div class="row-meta">FULL PRODUCTION</div>
+                    <div class="row-icon">+</div>
+                </div>
+                <div class="row-content">
+                    <div class="spotify-embed" data-uri="spotify:track:6yT7V6FwLbNMRE2mPGWNk5"></div>
+                </div>
+            </div>
+
+             <!-- ITEM 15 -->
+             <div class="data-row" onclick="toggleRow(this)">
+                <div class="row-trigger">
+                    <span class="row-id">15</span>
+                    <div class="row-title">AEONS - "Gray Sky"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
+                    <div class="row-meta">FULL PRODUCTION</div>
+                    <div class="row-icon">+</div>
+                </div>
+                <div class="row-content">
+                    <div class="spotify-embed" data-uri="spotify:track:6Xobucdoxisw1a4qnSc7Jd"></div>
+                </div>
+            </div>
+
+             <!-- ITEM 16 -->
+             <div class="data-row" onclick="toggleRow(this)">
+                <div class="row-trigger">
+                    <span class="row-id">16</span>
+                    <div class="row-title">Trevor - "Must Jää"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
+                    <div class="row-meta">FULL PRODUCTION</div>
+                    <div class="row-icon">+</div>
+                </div>
+                <div class="row-content">
+                    <div class="spotify-embed" data-uri="spotify:track:5WfB3dyYAIYxLg6madf8UG"></div>
+                </div>
+            </div>
+
         </div>
     </section>
 
-    <!-- Contact Section -->
+    <!-- SERVICES -->
+    <section id="services">
+        <div class="section-header">
+            <span class="label">SERVICES</span>
+            <span style="color:var(--dim)">//</span>
+        </div>
+        <div class="services-grid">
+            
+            <div class="service-cell">
+                <div class="service-num">01</div>
+                <h3>Mixing</h3>
+                <p>Balancing tracks for clarity, depth, and stereo width. Ensuring every element sits perfectly.</p>
+            </div>
+
+            <div class="service-cell">
+                <div class="service-num">02</div>
+                <h3>Mastering</h3>
+                <p>The final polish. Optimizing loudness and frequency balance for all streaming platforms.</p>
+            </div>
+
+            <div class="service-cell">
+                <div class="service-num">03</div>
+                <h3>Post Production</h3>
+                <p>Audio repair, dialogue editing, and sound design for video, podcasts, and film projects.</p>
+            </div>
+
+            <div class="service-cell">
+                <div class="service-num">04</div>
+                <h3>Ghost Writing</h3>
+                <p>Composition and lyrical assistance tailored to your vision. Melodic hooks to full arrangements.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CONTACT -->
     <section id="contact">
-        <div class="container">
-            <div class="section-title"><span>Get in touch</span></div>
-            <div class="contact-wrapper">
+        <div class="section-header">
+            <span class="label">CONTACT US</span>
+            <span style="color:var(--dim)">//</span>
+        </div>
+        <div class="contact-area">
+            <div style="font-family:var(--font-head); font-size:2rem; line-height:1.2; color:var(--dim)">
+                READY TO<br><span style="color:var(--text)">UPGRADE YOUR SOUND?</span>
+            </div>
+            
+            <div class="form-box">
                 <form action="https://formspree.io/f/xpwvrndn" method="POST">
-                    <input type="text" name="name" placeholder="Your Name" required>
-                    <input type="email" name="email" placeholder="Your Email" required>
-                    <textarea name="message" rows="5" placeholder="Tell us about your project..." required></textarea>
-                    <button type="submit">Send Message</button>
+                    <input type="text" name="name" placeholder="NAME" required>
+                    <input type="email" name="email" placeholder="EMAIL" required>
+                    <textarea name="message" rows="4" placeholder="TELL US ABOUT YOUR PROJECT" required></textarea>
+                    <button type="submit" class="submit-btn">SEND</button>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2026 Leveler Audio. All rights reserved.</p>
-        </div>
-    </footer>
+</main>
 
-    <!-- Script to handle Mobile Menu -->
-    <script>
-        function toggleMenu() {
-            const navLinks = document.getElementById("navLinks");
-            navLinks.classList.toggle("active");
-        }
-    </script>
+<!-- API SCRIPT -->
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+<script>
+    // 1. Accordion Logic
+    function toggleRow(element) {
+        // Remove active class from all other rows
+        document.querySelectorAll('.data-row').forEach(row => {
+            if(row !== element) {
+                row.classList.remove('active');
+            }
+        });
+        // Toggle the clicked row
+        element.classList.toggle('active');
+    }
 
-    <!-- SPOTIFY EMBED SCRIPT -->
-    <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
-    <script>
-        const spotifyControllers = [];
-
-        window.onSpotifyIframeApiReady = (IFrameAPI) => {
-            const elements = document.querySelectorAll('.spotify-embed');
-            
-            elements.forEach(element => {
-                const uri = element.getAttribute('data-uri');
-                const options = {
-                    uri: uri,
-                    width: '100%',
-                    height: '352', 
-                    theme: 'dark'
-                };
-                
-                const callback = (EmbedController) => {
-                    spotifyControllers.push(EmbedController);
-                    EmbedController.addListener('playback_update', e => {
-                        if (e.data.isPaused === false) {
-                            spotifyControllers.forEach(controller => {
-                                if (controller !== EmbedController) {
-                                    controller.pause();
-                                }
-                            });
-                        }
-                    });
-                };
-                
-                IFrameAPI.createController(element, options, callback);
-            });
-        };
-    </script>
+    // 2. Spotify API Logic (Standard)
+    const spotifyControllers = [];
+    window.onSpotifyIframeApiReady = (IFrameAPI) => {
+        const elements = document.querySelectorAll('.spotify-embed');
+        elements.forEach(element => {
+            const uri = element.getAttribute('data-uri');
+            const options = { uri: uri, width: '100%', height: '152', theme: 'dark' };
+            const callback = (EmbedController) => {
+                spotifyControllers.push(EmbedController);
+                EmbedController.addListener('playback_update', e => {
+                    if (e.data.isPaused === false) {
+                        spotifyControllers.forEach(c => {
+                            if (c !== EmbedController) c.pause();
+                        });
+                    }
+                });
+            };
+            IFrameAPI.createController(element, options, callback);
+        });
+    };
+</script>
 
 </body>
 </html>
