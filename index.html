@@ -3,31 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LEVELER AUDIO | MODERN AUDIO PRODUCTION</title>
+    <title>HANIKAT AUDIO | MODERN AUDIO PRODUCTION</title>
     
-    <!-- PRELOAD -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://open.spotify.com">
     
-    <!-- FONTS -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 0. SYSTEM CONFIGURATION --- */
+        /* =========================================
+           QUICK HIDE CONFIGURATION
+           ========================================= */
+           
+        /* HIDE RATES SECTION: */
+        #rates, a[href="#rates"] { display: none !important; }
+
+        /* HIDE ALBUMS SECTION: */
+        /* #albums, a[href="#albums"] { display: none !important; } */
+
+
+        /* --- SYSTEM STYLES --- */
         :root {
             --bg: #050505;
             --surface: #0a0a0a;
             --line: #222;
             --text: #e0e0e0;
             --dim: #666;
-            --accent: #ccff00; /* ACID LIME */
+            --accent: #ccff00;
             
             --font-head: 'Syncopate', sans-serif;
             --font-tech: 'Space Mono', monospace;
             
             --sidebar-width: 300px;
         }
+
+        html { scroll-behavior: smooth; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -49,7 +60,7 @@
         ul { list-style: none; }
         img { max-width: 100%; display: block; }
 
-        /* --- 1. SIDEBAR (Fixed to Left) --- */
+        /* SIDEBAR */
         .sidebar {
             position: fixed;
             top: 0; 
@@ -63,6 +74,7 @@
             flex-direction: column;
             justify-content: space-between;
             z-index: 1000;
+            overflow-y: auto; 
         }
 
         .brand {
@@ -85,7 +97,6 @@
             animation: pulse 2s infinite;
         }
 
-        /* Nav Layout */
         .nav-menu ul { display: flex; flex-direction: column; gap: 20px; }
 
         .nav-menu a {
@@ -119,7 +130,7 @@
             padding-top: 20px;
         }
 
-        /* --- 2. MAIN CONTENT (Pushed Right) --- */
+        /* MAIN CONTENT */
         .main-view {
             margin-left: var(--sidebar-width);
             width: calc(100% - var(--sidebar-width));
@@ -128,7 +139,7 @@
             position: relative;
         }
 
-        /* --- HERO --- */
+        /* HERO */
         .hero {
             height: 90vh; 
             border-bottom: 1px solid var(--line);
@@ -149,7 +160,6 @@
             z-index: 0;
         }
         
-        /* Grid Overlay */
         .hero::after {
             content: '';
             position: absolute;
@@ -163,7 +173,7 @@
 
         .hero h1 {
             font-family: var(--font-head);
-            font-size: 6vw; /* Responsive sizing */
+            font-size: 6vw;
             line-height: 0.9;
             text-transform: uppercase;
             color: white;
@@ -172,7 +182,7 @@
             mix-blend-mode: exclusion;
         }
 
-        /* --- WORK (DATA LIST) --- */
+        /* SECTION HEADERS */
         .section-header {
             padding: 40px 60px;
             border-bottom: 1px solid var(--line);
@@ -192,80 +202,152 @@
             letter-spacing: 2px;
         }
 
-        .data-list { display: flex; flex-direction: column; }
-
-        .data-row {
+        /* --- SLICK CARD GRID --- */
+        .portfolio-grid {
+            display: grid;
+            /* Changed to 1fr 1fr to force full width fill with no gaps */
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background-color: var(--line);
             border-bottom: 1px solid var(--line);
+        }
+
+        .portfolio-card {
             background: var(--bg);
-            transition: background 0.2s;
-        }
-
-        .data-row:hover { background: #121212; }
-
-        /* IMPORTANT: This trigger is the clickable part */
-        .row-trigger {
+            padding: 25px;
             display: flex;
-            align-items: center;
-            padding: 30px 60px;
-            cursor: pointer;
-            gap: 20px;
+            flex-direction: column;
+            gap: 10px; 
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .portfolio-card:hover {
+            background: #0e0e0e;
+        }
+
+        /* Embed Container */
+        .spotify-embed {
             width: 100%;
-        }
-
-        .row-id { 
-            color: var(--dim); 
-            font-size: 0.8rem; 
-            width: 40px;
-        }
-        
-        .row-title { 
-            font-weight: 700; 
-            font-size: 1.2rem; 
-            text-transform: uppercase; 
-            flex-grow: 1; 
-        }
-        
-        .row-credits {
-            color: var(--dim);
-            font-weight: 400;
+            border: none;
+            overflow: hidden; /* Force hide external scrollbars */
             display: block;
-            font-size: 0.8rem;
-            margin-top: 5px;
         }
 
-        .row-meta {
-            font-size: 0.85rem;
-            /* HIGHLIGHTED LOOK */
+        /* The "Role Badge" */
+        .role-badge {
             color: var(--accent);
+            font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            border-left: 2px solid var(--accent);
+            padding-left: 10px;
+            line-height: 1;
+        }
+
+        /* RATES SECTION */
+        .rates-container {
+            padding: 60px;
+            background: linear-gradient(180deg, rgba(204,255,0,0.02) 0%, rgba(0,0,0,0) 100%);
+        }
+
+        .rates-intro-text {
+            color: var(--dim);
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .rates-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .rate-card {
             border: 1px solid var(--line);
-            padding: 10px 15px;
-            border-radius: 2px;
-            white-space: nowrap; 
-            background: rgba(204, 255, 0, 0.05); 
+            background: var(--bg);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            transition: 0.3s;
+            position: relative;
         }
 
-        .row-icon {
+        .rate-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            background: #0e0e0e;
+        }
+
+        .rate-card h4 {
+            font-family: var(--font-head);
+            color: var(--text);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        .price-box {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .price-curr {
+            font-family: var(--font-head);
+            font-size: 2.5rem;
             color: var(--accent);
-            font-size: 1.5rem;
-            transition: transform 0.3s;
+            font-weight: 700;
         }
 
-        /* Hidden Player */
-        .row-content {
-            height: 0;
-            overflow: hidden;
-            transition: height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-            background: #000;
-            border-left: 4px solid var(--accent);
+        .price-old {
+            text-decoration: line-through;
+            color: var(--dim);
+            font-size: 1rem;
+        }
+        
+        .price-sub {
+            font-size: 1rem;
+            color: var(--dim);
+            margin-left: 5px;
         }
 
-        .data-row.active .row-content { height: 160px; }
-        .data-row.active .row-trigger { background: #1a1a1a; }
-        .data-row.active .row-icon { transform: rotate(45deg); }
+        .rate-features li {
+            font-size: 0.85rem;
+            color: var(--dim);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .rate-features li::before {
+            content: '+';
+            color: var(--accent);
+            margin-right: 10px;
+            font-weight: bold;
+        }
 
-        /* --- SERVICES (TECHNICAL GRID) --- */
+        .rate-btn {
+            margin-top: auto;
+            border: 1px solid var(--dim);
+            color: var(--text);
+            padding: 15px;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .rate-card:hover .rate-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border-color: var(--accent);
+        }
+
+        /* SERVICES */
         .services-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -280,7 +362,6 @@
         }
         
         .service-cell:nth-child(even) { border-right: none; }
-
         .service-cell:hover { background: var(--surface); }
         
         .service-cell::before {
@@ -295,8 +376,8 @@
         .service-num {
             font-family: var(--font-head);
             font-size: 4rem;
-            color: var(--line);
-            opacity: 0.4;
+            color: var(--text); 
+            opacity: 0.15; 
             margin-bottom: 20px;
             position: absolute;
             top: 40px; right: 40px;
@@ -316,7 +397,7 @@
             max-width: 90%;
         }
 
-        /* --- CONTACT --- */
+        /* CONTACT */
         .contact-area {
             padding: 100px 60px;
             display: grid;
@@ -368,69 +449,46 @@
             box-shadow: 0 0 30px rgba(204, 255, 0, 0.2);
         }
 
-        /* --- ANIMATIONS --- */
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.3; }
             100% { opacity: 1; }
         }
 
-        /* =========================================
-           MOBILE OPTIMIZATIONS
-           ========================================= */
         @media (max-width: 900px) {
-            
-            /* Sidebar becomes top header */
             .sidebar {
                 position: relative;
                 width: 100%;
-                height: auto;
+                height: 100dvh;
                 border-right: none;
                 border-bottom: 1px solid var(--line);
                 padding: 25px;
                 flex-direction: row;
                 align-items: center;
+                flex-wrap: wrap; 
+                justify-content: space-between;
             }
-
-            .nav-menu, .sidebar-footer, .meta-block { display: none; }
             
-            .status-dot { margin-left: auto; }
+            .nav-menu, .sidebar-footer { display: none; }
+            .brand-block { flex-grow: 1; }
+            .status-dot { margin-left: 0; }
 
-            /* Full width content */
             .main-view {
                 margin-left: 0;
                 width: 100%;
                 border-right: none;
             }
 
-            /* Hero Text scaling */
             .hero { padding: 30px; height: 50vh; }
-            /* CHANGED: Dynamic font size to prevent overflow */
-            .hero h1 { font-size: 11vw; }
+            .hero h1 { font-size: 8vw; } 
 
-            /* Portfolio List Mobile */
             .section-header { padding: 25px; font-size: 0.9rem; }
-            .row-trigger {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 25px;
-                gap: 15px;
-                position: relative;
-            }
-            .row-id { display: none; }
-            .row-icon {
-                position: absolute;
-                top: 25px; right: 25px;
-            }
-            .row-meta {
-                align-self: flex-start;
-                font-size: 0.75rem;
-                background: transparent;
-                padding: 0;
-                border: none;
-            }
             
-            /* Services Stack */
+            .portfolio-grid { grid-template-columns: 1fr; }
+            
+            .rates-container { padding: 30px; }
+            .rates-grid { grid-template-columns: 1fr; }
+
             .services-grid { grid-template-columns: 1fr; }
             .service-cell { 
                 border-right: none; 
@@ -438,7 +496,6 @@
             }
             .service-num { font-size: 3rem; top: 30px; right: 30px; }
             
-            /* Contact Stack */
             .contact-area { 
                 grid-template-columns: 1fr; 
                 padding: 50px 30px; 
@@ -449,31 +506,29 @@
 </head>
 <body>
 
-<!-- SIDEBAR (Fixed Left) -->
 <aside class="sidebar">
     <div class="brand-block">
-        <!-- Re-links to home -->
-        <a href="." class="brand">LEVELER<br>AUDIO</a>
+        <a href="." class="brand">HANIKAT<br>AUDIO</a>
     </div>
     <span class="status-dot"></span>
 
     <nav class="nav-menu">
         <ul>
             <li><a href="#work">LATEST WORK</a></li>
+            <li><a href="#albums">ALBUMS</a></li>
+            <li><a href="#rates">LIMITED RATES</a></li>
             <li><a href="#services">SERVICES</a></li>
             <li><a href="#contact">CONTACT US</a></li>
         </ul>
     </nav>
 
     <div class="sidebar-footer">
-        &copy; 2026 LEVELER AUDIO
+        &copy; 2026 HANIKAT AUDIO
     </div>
 </aside>
 
-<!-- MAIN CONTENT (Pushed Right) -->
 <main class="main-view">
 
-    <!-- HERO -->
     <section class="hero">
         <div class="hero-bg"></div>
         <h1>
@@ -482,233 +537,198 @@
         </h1>
     </section>
 
-    <!-- WORK (DATA LIST) -->
     <section id="work">
         <div class="section-header">
             <span class="label">LATEST WORK</span>
             <span style="color:var(--dim); font-size: 0.8rem;">//</span>
         </div>
 
-        <div class="data-list">
-            
-            <!-- 
-                 CRITICAL FIX APPLIED BELOW:
-                 The onclick="..." is NOW ONLY on the .row-trigger div.
-                 The .data-row div DOES NOT have an onclick.
-            -->
-
-            <!-- ITEM 01 -->
-            <div class="data-row">
-                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
-                    <span class="row-id">01</span>
-                    <div class="row-title">Geko - "Ära Jahtu"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">MIXED / MASTERED</div>
-                    <div class="row-icon">+</div>
-                </div>
-                <div class="row-content">
-                    <div class="spotify-embed" data-uri="spotify:track:09Zd2edvykjoOwkL8ETK4y"></div>
-                </div>
+        <div class="portfolio-grid">
+        
+            <!-- 01 -->
+            <div class="portfolio-card">
+                <div class="role-badge">MIXED / MASTERED</div>
+                <div class="spotify-embed" data-uri="spotify:track:09Zd2edvykjoOwkL8ETK4y"></div>
             </div>
 
-            <!-- ITEM 02 -->
-            <div class="data-row">
-                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
-                    <span class="row-id">02</span>
-                    <div class="row-title">Rainer Ild - "ginger goes black"<br><span class="row-credits">Martin Randalu</span></div>
-                    <div class="row-meta">MIXED</div>
-                    <div class="row-icon">+</div>
-                </div>
-                <div class="row-content">
-                    <div class="spotify-embed" data-uri="spotify:track:67s2ezmWmmmPAoxteKergR"></div>
-                </div>
+            <!-- 02 -->
+            <div class="portfolio-card">
+                <div class="role-badge">REC / PROD / MIX</div>
+                <div class="spotify-embed" data-uri="spotify:track:3nj9cRRWUHQddwl0ZCn3ri"></div>
             </div>
 
-            <!-- ITEM 03 -->
-            <div class="data-row">
-                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
-                    <span class="row-id">03</span>
-                    <div class="row-title">bloodfeather - "Closer Enemy"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">REC / PROD / MIX</div>
-                    <div class="row-icon">+</div>
-                </div>
-                <div class="row-content">
-                    <div class="spotify-embed" data-uri="spotify:track:3nj9cRRWUHQddwl0ZCn3ri"></div>
-                </div>
+            <!-- 03 -->
+            <div class="portfolio-card">
+                <div class="role-badge">REC / PROD / MIX / MAST</div>
+                <div class="spotify-embed" data-uri="spotify:track:3EyPQypQd1HoScl517wyvC"></div>
             </div>
 
-            <!-- ITEM 04 -->
-            <div class="data-row">
-                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
-                    <span class="row-id">04</span>
-                    <div class="row-title">Leaf This Planet - "Can You Hear Me?"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">REC / PROD / MIX / MAST</div>
-                    <div class="row-icon">+</div>
-                </div>
-                <div class="row-content">
-                    <div class="spotify-embed" data-uri="spotify:track:3EyPQypQd1HoScl517wyvC"></div>
-                </div>
+             <!-- 04 -->
+             <div class="portfolio-card">
+                <div class="role-badge">MIXED</div>
+                <div class="spotify-embed" data-uri="spotify:track:2eYNfzBPp0ahVYHMNiP9yK"></div>
             </div>
 
-            <!-- ITEM 05 -->
-            <div class="data-row">
-                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
-                    <span class="row-id">05</span>
-                    <div class="row-title">Lenna - "Maailmalõpu eel"<br><span class="row-credits">Martin Randalu</span></div>
-                    <div class="row-meta">MASTERED</div>
-                    <div class="row-icon">+</div>
-                </div>
-                <div class="row-content">
-                    <div class="spotify-embed" data-uri="spotify:track:5uWnzCZSpaS0KqFpp6Nbjz"></div>
-                </div>
+             <!-- 05 -->
+             <div class="portfolio-card">
+                <div class="role-badge">MIXED / MASTERED</div>
+                <div class="spotify-embed" data-uri="spotify:track:6uZJGCqNAaIhfBmxH3Wus0"></div>
             </div>
 
-            <!-- ITEM 06 -->
-            <div class="data-row">
-                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
-                    <span class="row-id">06</span>
-                    <div class="row-title">Horror Dance Squad - "Take Aim & Fire"<br><span class="row-credits">Martin Randalu</span></div>
-                    <div class="row-meta">MIXED</div>
-                    <div class="row-icon">+</div>
-                </div>
-                <div class="row-content">
-                    <div class="spotify-embed" data-uri="spotify:track:3bvQmVs1WeeMq5bwCugZnL"></div>
-                </div>
+             <!-- 06 -->
+             <div class="portfolio-card">
+                <div class="role-badge">REC / PROD / MIX</div>
+                <div class="spotify-embed" data-uri="spotify:track:1yyuZv1L3tmi1QeEL4CBAR"></div>
             </div>
 
-             <!-- ITEM 07 -->
-             <div class="data-row">
-                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
-                    <span class="row-id">07</span>
-                    <div class="row-title">Ketaspidur, Liv - "Tragöödia"<br><span class="row-credits">Martin Randalu</span></div>
-                    <div class="row-meta">MASTERED</div>
-                    <div class="row-icon">+</div>
-                </div>
-                <div class="row-content">
-                    <div class="spotify-embed" data-uri="spotify:track:3o04n5EbGnWpdJlcb03ap2"></div>
-                </div>
+            <!-- 07 -->
+             <div class="portfolio-card">
+                <div class="role-badge">REC / PROD / MIX / MAST</div>
+                <div class="spotify-embed" data-uri="spotify:track:6yT7V6FwLbNMRE2mPGWNk5"></div>
             </div>
 
-             <!-- ITEM 08 -->
-             <div class="data-row">
-                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
-                    <span class="row-id">08</span>
-                    <div class="row-title">Goresoerd - "Maokaev"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">MIXED</div>
-                    <div class="row-icon">+</div>
-                </div>
-                <div class="row-content">
-                    <div class="spotify-embed" data-uri="spotify:track:2eYNfzBPp0ahVYHMNiP9yK"></div>
-                </div>
+             <!-- 08 -->
+             <div class="portfolio-card">
+                <div class="role-badge">REC / PROD / MIX / MAST</div>
+                <div class="spotify-embed" data-uri="spotify:track:6Xobucdoxisw1a4qnSc7Jd"></div>
             </div>
 
-             <!-- ITEM 09 -->
-             <div class="data-row">
-                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
-                    <span class="row-id">09</span>
-                    <div class="row-title">Fööniks - "Metsik"<br><span class="row-credits">Martin Randalu</span></div>
-                    <div class="row-meta">MIXED / MASTERED</div>
-                    <div class="row-icon">+</div>
-                </div>
-                <div class="row-content">
-                    <div class="spotify-embed" data-uri="spotify:track:4NyOCGz9E3sru0YshzAikj"></div>
-                </div>
-            </div>
-
-             <!-- ITEM 10 -->
-             <div class="data-row">
-                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
-                    <span class="row-id">10</span>
-                    <div class="row-title">Pizzafacial - "DJ Disco Disaster"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">MIXED / MASTERED</div>
-                    <div class="row-icon">+</div>
-                </div>
-                <div class="row-content">
-                    <div class="spotify-embed" data-uri="spotify:track:6uZJGCqNAaIhfBmxH3Wus0"></div>
-                </div>
-            </div>
-
-             <!-- ITEM 11 -->
-             <div class="data-row">
-                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
-                    <span class="row-id">11</span>
-                    <div class="row-title">Pridian - "Hive Mind"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">REC / PROD / MIX</div>
-                    <div class="row-icon">+</div>
-                </div>
-                <div class="row-content">
-                    <div class="spotify-embed" data-uri="spotify:track:1yyuZv1L3tmi1QeEL4CBAR"></div>
-                </div>
-            </div>
-
-             <!-- ITEM 12 -->
-             <div class="data-row">
-                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
-                    <span class="row-id">12</span>
-                    <div class="row-title">Tanel Padar - "Mustad purjed"<br><span class="row-credits">Martin Randalu</span></div>
-                    <div class="row-meta">MIXED / MASTERED</div>
-                    <div class="row-icon">+</div>
-                </div>
-                <div class="row-content">
-                    <div class="spotify-embed" data-uri="spotify:track:1UzSiTbiX3Yryk2IPLXdb2"></div>
-                </div>
-            </div>
-
-             <!-- ITEM 13 -->
-             <div class="data-row">
-                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
-                    <span class="row-id">13</span>
-                    <div class="row-title">Ocean Districts - "Fata Morgana"<br><span class="row-credits">Martin Randalu</span></div>
-                    <div class="row-meta">MASTERED</div>
-                    <div class="row-icon">+</div>
-                </div>
-                <div class="row-content">
-                    <div class="spotify-embed" data-uri="spotify:track:3yRT9HfAZG7knZ77TnuCqO"></div>
-                </div>
-            </div>
-
-             <!-- ITEM 14 -->
-             <div class="data-row">
-                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
-                    <span class="row-id">14</span>
-                    <div class="row-title">bloodfeather - "Ashes"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">REC / PROD / MIX / MAST</div>
-                    <div class="row-icon">+</div>
-                </div>
-                <div class="row-content">
-                    <div class="spotify-embed" data-uri="spotify:track:6yT7V6FwLbNMRE2mPGWNk5"></div>
-                </div>
-            </div>
-
-             <!-- ITEM 15 -->
-             <div class="data-row">
-                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
-                    <span class="row-id">15</span>
-                    <div class="row-title">AEONS - "Gray Sky"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">REC / PROD / MIX / MAST</div>
-                    <div class="row-icon">+</div>
-                </div>
-                <div class="row-content">
-                    <div class="spotify-embed" data-uri="spotify:track:6Xobucdoxisw1a4qnSc7Jd"></div>
-                </div>
-            </div>
-
-             <!-- ITEM 16 -->
-             <div class="data-row">
-                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
-                    <span class="row-id">16</span>
-                    <div class="row-title">Trevor - "Must Jää"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">REC / PROD / MIX / MAST</div>
-                    <div class="row-icon">+</div>
-                </div>
-                <div class="row-content">
-                    <div class="spotify-embed" data-uri="spotify:track:5WfB3dyYAIYxLg6madf8UG"></div>
-                </div>
+             <!-- 09 -->
+             <div class="portfolio-card">
+                <div class="role-badge">REC / PROD / MIX / MAST</div>
+                <div class="spotify-embed" data-uri="spotify:track:5WfB3dyYAIYxLg6madf8UG"></div>
             </div>
 
         </div>
     </section>
 
-    <!-- SERVICES -->
+    <section id="albums">
+        <div class="section-header">
+            <span class="label">ALBUMS</span>
+            <span style="color:var(--dim); font-size: 0.8rem;">//</span>
+        </div>
+
+        <div class="portfolio-grid">
+
+            <!-- 01 -->
+             <div class="portfolio-card">
+                <div class="spotify-embed" data-uri="spotify:album:6sI8FzO0b309qOBB9Th666"></div>
+            </div>
+			
+			<!-- 02 -->
+            <div class="portfolio-card">
+                <div class="spotify-embed" data-uri="spotify:album:1oWe42PR3MPfBCvcmKdVlE"></div>
+            </div>
+
+            <!-- 03 -->
+            <div class="portfolio-card">
+                <div class="spotify-embed" data-uri="spotify:album:5wm0z8Bzf7R7Dm6wucF2Ga"></div> 
+            </div>
+
+             <!-- 04 -->
+             <div class="portfolio-card">
+                <div class="spotify-embed" data-uri="spotify:album:0aIeaByn3xmG4Z29gnC4yq"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="rates">
+        <div class="section-header">
+            <span class="label">LIMITED OFFER BOOKING RATES</span>
+            <span style="color:var(--dim)">//</span>
+        </div>
+        <div class="rates-container">
+            <p class="rates-intro-text">
+                WE ARE OPENING A LIMITED NUMBER OF STUDIO SLOTS FOR NEW PROJECTS. 
+                PROFESSIONAL QUALITY. GAP FILLING RATES.
+            </p>
+
+            <div class="rates-grid">
+                
+                <div class="rate-card">
+                    <h4>MIXING</h4>
+                    <div class="price-box">
+                        <span class="price-curr">€150</span>
+                        <span class="price-old">€350</span>
+                    </div>
+                    <ul class="rate-features">
+                        <li>Hybrid Analog/Digital Chain</li>
+                        <li>Sample Replacement (Triggering)</li>
+                        <li>2 Revision Rounds</li>
+                        <li>Fast Turnaround</li>
+                    </ul>
+                    <a href="#contact" class="rate-btn">BOOK SLOT</a>
+                </div>
+
+                <div class="rate-card">
+                    <h4 style="color:var(--accent)">MASTERING</h4>
+                    <div class="price-box">
+                        <span class="price-curr">€70</span>
+                        <span class="price-old">€100</span>
+                    </div>
+                    <ul class="rate-features">
+                        <li>Loudness Optimized for Streaming</li>
+                        <li>Stem Mastering Options</li>
+                        <li>First Song FREE (New Clients)</li>
+                        <li>2 Revision Rounds</li>
+                    </ul>
+                    <a href="#contact" class="rate-btn">BOOK SLOT</a>
+                </div>
+
+                <div class="rate-card">
+                    <h4>EDITING</h4>
+                    <div class="price-box">
+                        <span class="price-curr">€50</span>
+                        <span class="price-old">€90</span>
+                    </div>
+                    <ul class="rate-features">
+                        <li>Drum Quantization</li>
+                        <li>Vocal Tuning</li>
+                        <li>Noise Reduction</li>
+                        <li>Project Prep</li>
+                    </ul>
+                    <a href="#contact" class="rate-btn">BOOK SLOT</a>
+                </div>
+
+                 <div class="rate-card">
+                    <h4>POST-PROD</h4>
+                    <div class="price-box">
+                        <span class="price-curr">€45</span>
+                        <span class="price-sub">/ hour</span>
+                    </div>
+                    <ul class="rate-features">
+                        <li>Podcast / Audiobook Editing</li>
+                        <li>Dialogue Cleanup & Repair</li>
+                        <li>Sound Design for Video</li>
+                        <li>Broadcast Loudness Standards</li>
+                    </ul>
+                    <a href="#contact" class="rate-btn">BOOK SLOT</a>
+                </div>
+
+                 <div class="rate-card">
+                    <h4>GHOST WRITING</h4>
+                    <div class="price-box">
+                        <span class="price-curr">€250</span>
+                        <span class="price-sub">starting at</span>
+                    </div>
+                    <ul class="rate-features">
+                        <li>Custom Instrumental Arrangement</li>
+                        <li>Drum Programming (MIDI included)</li>
+                        <li>Riff Writing & Structure</li>
+                        <li>Vocal Arrangements & Lyrics</li>
+                    </ul>
+                    <a href="#contact" class="rate-btn">DISCUSS IDEA</a>
+                </div>
+
+            </div>
+            
+            <div style="margin-top:20px; font-size: 0.7rem; color: var(--dim); border-top: 1px solid #222; padding-top:10px;">
+                * CONDITIONS: Payment required upfront. Portfolio usage rights required.
+            </div>
+        </div>
+    </section>
+
     <section id="services">
         <div class="section-header">
             <span class="label">SERVICES</span>
@@ -727,15 +747,21 @@
                 <h3>Mastering</h3>
                 <p>The final polish. Optimizing loudness and frequency balance for all streaming platforms and physical media.</p>
             </div>
-
+            
             <div class="service-cell">
                 <div class="service-num">03</div>
+                <h3>Editing</h3>
+                <p>Precision time alignment and transparent pitch correction. Quantizing drums and tuning vocals to create a flawless foundation.</p>
+            </div>
+
+            <div class="service-cell">
+                <div class="service-num">04</div>
                 <h3>Post Production</h3>
                 <p>Audio repair, dialogue editing, and sound design for video, podcasts, and film projects.</p>
             </div>
 
             <div class="service-cell">
-                <div class="service-num">04</div>
+                <div class="service-num">05</div>
                 <h3>Ghost Writing</h3>
                 <p>Composition and lyrical assistance tailored to your vision. Melodic hooks to full arrangements.</p>
             </div>
@@ -743,7 +769,6 @@
         </div>
     </section>
 
-    <!-- CONTACT -->
     <section id="contact">
         <div class="section-header">
             <span class="label">CONTACT US</span>
@@ -767,35 +792,29 @@
 
 </main>
 
-<!-- API SCRIPT -->
 <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 <script>
-    // 1. Accordion Logic
-    function toggleRow(element) {
-        // Toggle the clicked row
-        element.classList.toggle('active');
-        
-        // Optional: Close others if you only want one open at a time
-        document.querySelectorAll('.data-row').forEach(row => {
-            if(row !== element) {
-                row.classList.remove('active');
-            }
-        });
-    }
-
-    // 2. Spotify API Logic (Standard)
     const spotifyControllers = [];
     window.onSpotifyIframeApiReady = (IFrameAPI) => {
         const elements = document.querySelectorAll('.spotify-embed');
         elements.forEach(element => {
             const uri = element.getAttribute('data-uri');
-            const options = { uri: uri, width: '100%', height: '152', theme: 'dark' };
+            
+            if(!uri) return;
+
+            const isAlbum = uri.includes('album') || uri.includes('playlist');
+            
+            // INCREASED HEIGHT FOR TRACKS TO 160px to remove scrollbars
+            // Albums set to 380px for standard tall card
+            const height = isAlbum ? '380' : '160';
+
+            const options = { uri: uri, width: '100%', height: height, theme: 'dark' };
             const callback = (EmbedController) => {
                 spotifyControllers.push(EmbedController);
                 EmbedController.addListener('playback_update', e => {
                     if (e.data.isPaused === false) {
                         spotifyControllers.forEach(c => {
-                            if (c !== EmbedController) c.pause();
+                            if (c && c !== EmbedController) c.pause();
                         });
                     }
                 });
