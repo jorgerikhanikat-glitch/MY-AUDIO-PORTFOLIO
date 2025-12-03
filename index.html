@@ -5,16 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LEVELER AUDIO | MODERN AUDIO PRODUCTION</title>
     
-    <!-- PRELOAD -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://open.spotify.com">
     
     <!-- FONTS -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 0. SYSTEM CONFIGURATION --- */
+        /* --- SYSTEM CONFIGURATION --- */
         :root {
             --bg: #050505;
             --surface: #0a0a0a;
@@ -31,11 +29,6 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-
         body {
             background-color: var(--bg);
             color: var(--text);
@@ -47,13 +40,11 @@
 
         a { text-decoration: none; color: inherit; transition: 0.3s; }
         ul { list-style: none; }
-        img { max-width: 100%; display: block; }
 
-        /* --- 1. SIDEBAR (Fixed to Left) --- */
+        /* --- SIDEBAR --- */
         .sidebar {
             position: fixed;
-            top: 0; 
-            left: 0;
+            top: 0; left: 0;
             width: var(--sidebar-width);
             height: 100vh;
             background: var(--bg);
@@ -85,32 +76,14 @@
             animation: pulse 2s infinite;
         }
 
-        /* Nav Layout */
         .nav-menu ul { display: flex; flex-direction: column; gap: 20px; }
-
         .nav-menu a {
             font-size: 1.1rem;
             text-transform: uppercase;
-            position: relative;
-            padding-left: 0;
-            display: block;
             font-weight: 700;
+            display: block;
         }
-
-        .nav-menu a:hover {
-            color: var(--accent);
-            transform: translateX(10px);
-        }
-        
-        .nav-menu a::before {
-            content: '//';
-            position: absolute;
-            left: -20px;
-            opacity: 0;
-            color: var(--accent);
-            transition: 0.3s;
-        }
-        .nav-menu a:hover::before { opacity: 1; left: -25px; }
+        .nav-menu a:hover { color: var(--accent); transform: translateX(10px); }
 
         .sidebar-footer {
             font-size: 0.65rem;
@@ -119,7 +92,7 @@
             padding-top: 20px;
         }
 
-        /* --- 2. MAIN CONTENT (Pushed Right) --- */
+        /* --- MAIN CONTENT --- */
         .main-view {
             margin-left: var(--sidebar-width);
             width: calc(100% - var(--sidebar-width));
@@ -149,21 +122,18 @@
             z-index: 0;
         }
         
-        /* Grid Overlay */
         .hero::after {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                linear-gradient(rgba(5,5,5,0) 0%, rgba(5,5,5,1) 100%),
-                repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 100px);
+            background: linear-gradient(rgba(5,5,5,0) 0%, rgba(5,5,5,1) 100%);
             pointer-events: none;
             z-index: 1;
         }
 
         .hero h1 {
             font-family: var(--font-head);
-            font-size: 6vw; /* Responsive sizing desktop */
+            font-size: 6vw; 
             line-height: 0.9;
             text-transform: uppercase;
             color: white;
@@ -172,7 +142,7 @@
             mix-blend-mode: exclusion;
         }
 
-        /* --- WORK (DATA LIST) --- */
+        /* --- WORK (ACCORDION) --- */
         .section-header {
             padding: 40px 60px;
             border-bottom: 1px solid var(--line);
@@ -202,12 +172,14 @@
 
         .data-row:hover { background: #121212; }
 
+        /* The clickable area is now ONLY this header part */
         .row-trigger {
             display: flex;
             align-items: center;
             padding: 30px 60px;
             cursor: pointer;
             gap: 20px;
+            width: 100%; /* Ensure full width click target */
         }
 
         .row-id { 
@@ -216,31 +188,24 @@
             width: 40px;
         }
         
-        .row-title { 
-            font-weight: 700; 
-            font-size: 1.2rem; 
-            text-transform: uppercase; 
+        .row-info { 
             flex-grow: 1; 
+        }
+
+        .row-role {
+            display: block;
+            color: var(--accent); /* Highlight the role */
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            margin-bottom: 4px;
         }
         
         .row-credits {
             color: var(--dim);
             font-weight: 400;
-            display: block;
-            font-size: 0.8rem;
-            margin-top: 5px;
-        }
-
-        .row-meta {
             font-size: 0.85rem;
-            color: var(--accent);
-            font-weight: 700;
             text-transform: uppercase;
-            border: 1px solid var(--line);
-            padding: 10px 15px;
-            border-radius: 2px;
-            white-space: nowrap; 
-            background: rgba(204, 255, 0, 0.05); 
         }
 
         .row-icon {
@@ -249,20 +214,31 @@
             transition: transform 0.3s;
         }
 
-        /* Hidden Player */
+        /* Hidden Player Container */
         .row-content {
             height: 0;
             overflow: hidden;
             transition: height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             background: #000;
             border-left: 4px solid var(--accent);
+            position: relative; /* Context for iframe */
         }
 
-        .data-row.active .row-content { height: 160px; }
+        /* Ensure iframe fills the container completely */
+        .row-content .spotify-embed, 
+        .row-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* Active States */
+        .data-row.active .row-content { height: 160px; /* Slight buffer over 152px */ }
         .data-row.active .row-trigger { background: #1a1a1a; }
         .data-row.active .row-icon { transform: rotate(45deg); }
 
-        /* --- SERVICES (TECHNICAL GRID) --- */
+        /* --- SERVICES --- */
         .services-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -277,7 +253,6 @@
         }
         
         .service-cell:nth-child(even) { border-right: none; }
-
         .service-cell:hover { background: var(--surface); }
         
         .service-cell::before {
@@ -365,7 +340,6 @@
             box-shadow: 0 0 30px rgba(204, 255, 0, 0.2);
         }
 
-        /* --- ANIMATIONS --- */
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.3; }
@@ -376,8 +350,6 @@
            MOBILE OPTIMIZATIONS
            ========================================= */
         @media (max-width: 900px) {
-            
-            /* Sidebar becomes top header */
             .sidebar {
                 position: relative;
                 width: 100%;
@@ -389,48 +361,27 @@
                 align-items: center;
             }
 
-            .nav-menu, .sidebar-footer, .meta-block { display: none; }
-            
+            .nav-menu, .sidebar-footer { display: none; }
             .status-dot { margin-left: auto; }
 
-            /* Full width content */
-            .main-view {
-                margin-left: 0;
-                width: 100%;
-                border-right: none;
-            }
+            .main-view { margin-left: 0; width: 100%; border-right: none; }
 
-            /* --- FIXED HERO TEXT SCALING --- */
             .hero { padding: 30px; height: 50vh; }
-            
-            /* Changed from fixed size to VW (Viewport Width) so it always fits */
-            .hero h1 { 
-                font-size: 11vw; 
-            }
+            .hero h1 { font-size: 11vw; } /* Dynamic sizing prevents overflow */
 
-            /* Portfolio List Mobile */
+            /* Mobile Portfolio */
             .section-header { padding: 25px; font-size: 0.9rem; }
+            
             .row-trigger {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 25px;
+                padding: 20px 25px;
                 gap: 15px;
-                position: relative;
             }
             .row-id { display: none; }
-            .row-icon {
-                position: absolute;
-                top: 25px; right: 25px;
-            }
-            .row-meta {
-                align-self: flex-start;
-                font-size: 0.75rem;
-                background: transparent;
-                padding: 0;
-                border: none;
-            }
             
-            /* Services Stack */
+            .row-role { font-size: 1rem; }
+            .row-credits { font-size: 0.75rem; }
+
+            /* Mobile Services */
             .services-grid { grid-template-columns: 1fr; }
             .service-cell { 
                 border-right: none; 
@@ -438,7 +389,7 @@
             }
             .service-num { font-size: 3rem; top: 30px; right: 30px; }
             
-            /* Contact Stack */
+            /* Mobile Contact */
             .contact-area { 
                 grid-template-columns: 1fr; 
                 padding: 50px 30px; 
@@ -449,10 +400,9 @@
 </head>
 <body>
 
-<!-- SIDEBAR (Fixed Left) -->
+<!-- SIDEBAR -->
 <aside class="sidebar">
     <div class="brand-block">
-        <!-- Re-links to home -->
         <a href="." class="brand">LEVELER<br>AUDIO</a>
     </div>
     <span class="status-dot"></span>
@@ -470,7 +420,7 @@
     </div>
 </aside>
 
-<!-- MAIN CONTENT (Pushed Right) -->
+<!-- MAIN CONTENT -->
 <main class="main-view">
 
     <!-- HERO -->
@@ -482,7 +432,7 @@
         </h1>
     </section>
 
-    <!-- WORK (DATA LIST) -->
+    <!-- WORK -->
     <section id="work">
         <div class="section-header">
             <span class="label">LATEST WORK</span>
@@ -491,12 +441,15 @@
 
         <div class="data-list">
             
-            <!-- ITEM 01 -->
-            <div class="data-row" onclick="toggleRow(this)">
-                <div class="row-trigger">
+            <!-- FIXED: Click event is ONLY on .row-trigger, NOT on .data-row -->
+            <!-- Item 01 -->
+            <div class="data-row">
+                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
                     <span class="row-id">01</span>
-                    <div class="row-title">Geko - "Ära Jahtu"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">MIXED / MASTERED</div>
+                    <div class="row-info">
+                        <span class="row-role">MIXED / MASTERED</span>
+                        <span class="row-credits">Jörg-Erik Hanikat</span>
+                    </div>
                     <div class="row-icon">+</div>
                 </div>
                 <div class="row-content">
@@ -504,12 +457,14 @@
                 </div>
             </div>
 
-            <!-- ITEM 02 -->
-            <div class="data-row" onclick="toggleRow(this)">
-                <div class="row-trigger">
+            <!-- Item 02 -->
+            <div class="data-row">
+                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
                     <span class="row-id">02</span>
-                    <div class="row-title">Rainer Ild - "ginger goes black"<br><span class="row-credits">Martin Randalu</span></div>
-                    <div class="row-meta">MIXED</div>
+                    <div class="row-info">
+                        <span class="row-role">MIXED</span>
+                        <span class="row-credits">Martin Randalu</span>
+                    </div>
                     <div class="row-icon">+</div>
                 </div>
                 <div class="row-content">
@@ -517,12 +472,14 @@
                 </div>
             </div>
 
-            <!-- ITEM 03 -->
-            <div class="data-row" onclick="toggleRow(this)">
-                <div class="row-trigger">
+            <!-- Item 03 -->
+            <div class="data-row">
+                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
                     <span class="row-id">03</span>
-                    <div class="row-title">bloodfeather - "Closer Enemy"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">REC / PROD / MIX</div>
+                    <div class="row-info">
+                        <span class="row-role">REC / PROD / MIX</span>
+                        <span class="row-credits">Jörg-Erik Hanikat</span>
+                    </div>
                     <div class="row-icon">+</div>
                 </div>
                 <div class="row-content">
@@ -530,12 +487,14 @@
                 </div>
             </div>
 
-            <!-- ITEM 04 -->
-            <div class="data-row" onclick="toggleRow(this)">
-                <div class="row-trigger">
+            <!-- Item 04 -->
+            <div class="data-row">
+                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
                     <span class="row-id">04</span>
-                    <div class="row-title">Leaf This Planet - "Can You Hear Me?"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">REC / PROD / MIX / MAST</div>
+                    <div class="row-info">
+                        <span class="row-role">REC / PROD / MIX / MAST</span>
+                        <span class="row-credits">Jörg-Erik Hanikat</span>
+                    </div>
                     <div class="row-icon">+</div>
                 </div>
                 <div class="row-content">
@@ -543,12 +502,14 @@
                 </div>
             </div>
 
-            <!-- ITEM 05 -->
-            <div class="data-row" onclick="toggleRow(this)">
-                <div class="row-trigger">
+            <!-- Item 05 -->
+            <div class="data-row">
+                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
                     <span class="row-id">05</span>
-                    <div class="row-title">Lenna - "Maailmalõpu eel"<br><span class="row-credits">Martin Randalu</span></div>
-                    <div class="row-meta">MASTERED</div>
+                    <div class="row-info">
+                        <span class="row-role">MASTERED</span>
+                        <span class="row-credits">Martin Randalu</span>
+                    </div>
                     <div class="row-icon">+</div>
                 </div>
                 <div class="row-content">
@@ -556,12 +517,14 @@
                 </div>
             </div>
 
-            <!-- ITEM 06 -->
-            <div class="data-row" onclick="toggleRow(this)">
-                <div class="row-trigger">
+            <!-- Item 06 -->
+            <div class="data-row">
+                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
                     <span class="row-id">06</span>
-                    <div class="row-title">Horror Dance Squad - "Take Aim"<br><span class="row-credits">Martin Randalu</span></div>
-                    <div class="row-meta">MIXED</div>
+                    <div class="row-info">
+                        <span class="row-role">MIXED</span>
+                        <span class="row-credits">Martin Randalu</span>
+                    </div>
                     <div class="row-icon">+</div>
                 </div>
                 <div class="row-content">
@@ -569,12 +532,14 @@
                 </div>
             </div>
 
-             <!-- ITEM 07 -->
-             <div class="data-row" onclick="toggleRow(this)">
-                <div class="row-trigger">
+            <!-- Item 07 -->
+            <div class="data-row">
+                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
                     <span class="row-id">07</span>
-                    <div class="row-title">Ketaspidur - "Tragöödia"<br><span class="row-credits">Martin Randalu</span></div>
-                    <div class="row-meta">MASTERED</div>
+                    <div class="row-info">
+                        <span class="row-role">MASTERED</span>
+                        <span class="row-credits">Martin Randalu</span>
+                    </div>
                     <div class="row-icon">+</div>
                 </div>
                 <div class="row-content">
@@ -582,12 +547,14 @@
                 </div>
             </div>
 
-             <!-- ITEM 08 -->
-             <div class="data-row" onclick="toggleRow(this)">
-                <div class="row-trigger">
+            <!-- Item 08 -->
+            <div class="data-row">
+                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
                     <span class="row-id">08</span>
-                    <div class="row-title">Goresoerd - "Maokaev"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">MIXED</div>
+                    <div class="row-info">
+                        <span class="row-role">MIXED</span>
+                        <span class="row-credits">Jörg-Erik Hanikat</span>
+                    </div>
                     <div class="row-icon">+</div>
                 </div>
                 <div class="row-content">
@@ -595,12 +562,14 @@
                 </div>
             </div>
 
-             <!-- ITEM 09 -->
-             <div class="data-row" onclick="toggleRow(this)">
-                <div class="row-trigger">
+            <!-- Item 09 -->
+            <div class="data-row">
+                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
                     <span class="row-id">09</span>
-                    <div class="row-title">Fööniks - "Metsik"<br><span class="row-credits">Martin Randalu</span></div>
-                    <div class="row-meta">MIXED / MASTERED</div>
+                    <div class="row-info">
+                        <span class="row-role">MIXED / MASTERED</span>
+                        <span class="row-credits">Martin Randalu</span>
+                    </div>
                     <div class="row-icon">+</div>
                 </div>
                 <div class="row-content">
@@ -608,12 +577,14 @@
                 </div>
             </div>
 
-             <!-- ITEM 10 -->
-             <div class="data-row" onclick="toggleRow(this)">
-                <div class="row-trigger">
+            <!-- Item 10 -->
+            <div class="data-row">
+                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
                     <span class="row-id">10</span>
-                    <div class="row-title">Pizzafacial - "Disco Disaster"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">MIXED / MASTERED</div>
+                    <div class="row-info">
+                        <span class="row-role">MIXED / MASTERED</span>
+                        <span class="row-credits">Jörg-Erik Hanikat</span>
+                    </div>
                     <div class="row-icon">+</div>
                 </div>
                 <div class="row-content">
@@ -621,12 +592,14 @@
                 </div>
             </div>
 
-             <!-- ITEM 11 -->
-             <div class="data-row" onclick="toggleRow(this)">
-                <div class="row-trigger">
+            <!-- Item 11 -->
+            <div class="data-row">
+                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
                     <span class="row-id">11</span>
-                    <div class="row-title">Pridian - "Hive Mind"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">REC / PROD / MIX</div>
+                    <div class="row-info">
+                        <span class="row-role">REC / PROD / MIX</span>
+                        <span class="row-credits">Jörg-Erik Hanikat</span>
+                    </div>
                     <div class="row-icon">+</div>
                 </div>
                 <div class="row-content">
@@ -634,12 +607,14 @@
                 </div>
             </div>
 
-             <!-- ITEM 12 -->
-             <div class="data-row" onclick="toggleRow(this)">
-                <div class="row-trigger">
+            <!-- Item 12 -->
+            <div class="data-row">
+                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
                     <span class="row-id">12</span>
-                    <div class="row-title">Tanel Padar - "Mustad purjed"<br><span class="row-credits">Martin Randalu</span></div>
-                    <div class="row-meta">MIXED / MASTERED</div>
+                    <div class="row-info">
+                        <span class="row-role">MIXED / MASTERED</span>
+                        <span class="row-credits">Martin Randalu</span>
+                    </div>
                     <div class="row-icon">+</div>
                 </div>
                 <div class="row-content">
@@ -647,12 +622,14 @@
                 </div>
             </div>
 
-             <!-- ITEM 13 -->
-             <div class="data-row" onclick="toggleRow(this)">
-                <div class="row-trigger">
+            <!-- Item 13 -->
+            <div class="data-row">
+                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
                     <span class="row-id">13</span>
-                    <div class="row-title">Ocean Districts - "Fata Morgana"<br><span class="row-credits">Martin Randalu</span></div>
-                    <div class="row-meta">MASTERED</div>
+                    <div class="row-info">
+                        <span class="row-role">MASTERED</span>
+                        <span class="row-credits">Martin Randalu</span>
+                    </div>
                     <div class="row-icon">+</div>
                 </div>
                 <div class="row-content">
@@ -660,12 +637,14 @@
                 </div>
             </div>
 
-             <!-- ITEM 14 -->
-             <div class="data-row" onclick="toggleRow(this)">
-                <div class="row-trigger">
+            <!-- Item 14 -->
+            <div class="data-row">
+                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
                     <span class="row-id">14</span>
-                    <div class="row-title">bloodfeather - "Ashes"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">REC / PROD / MIX / MAST</div>
+                    <div class="row-info">
+                        <span class="row-role">REC / PROD / MIX / MAST</span>
+                        <span class="row-credits">Jörg-Erik Hanikat</span>
+                    </div>
                     <div class="row-icon">+</div>
                 </div>
                 <div class="row-content">
@@ -673,12 +652,14 @@
                 </div>
             </div>
 
-             <!-- ITEM 15 -->
-             <div class="data-row" onclick="toggleRow(this)">
-                <div class="row-trigger">
+            <!-- Item 15 -->
+            <div class="data-row">
+                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
                     <span class="row-id">15</span>
-                    <div class="row-title">AEONS - "Gray Sky"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">REC / PROD / MIX / MAST</div>
+                    <div class="row-info">
+                        <span class="row-role">REC / PROD / MIX / MAST</span>
+                        <span class="row-credits">Jörg-Erik Hanikat</span>
+                    </div>
                     <div class="row-icon">+</div>
                 </div>
                 <div class="row-content">
@@ -686,12 +667,14 @@
                 </div>
             </div>
 
-             <!-- ITEM 16 -->
-             <div class="data-row" onclick="toggleRow(this)">
-                <div class="row-trigger">
+            <!-- Item 16 -->
+            <div class="data-row">
+                <div class="row-trigger" onclick="toggleRow(this.parentNode)">
                     <span class="row-id">16</span>
-                    <div class="row-title">Trevor - "Must Jää"<br><span class="row-credits">Jörg-Erik Hanikat</span></div>
-                    <div class="row-meta">REC / PROD / MIX / MAST</div>
+                    <div class="row-info">
+                        <span class="row-role">REC / PROD / MIX / MAST</span>
+                        <span class="row-credits">Jörg-Erik Hanikat</span>
+                    </div>
                     <div class="row-icon">+</div>
                 </div>
                 <div class="row-content">
@@ -709,31 +692,26 @@
             <span style="color:var(--dim)">//</span>
         </div>
         <div class="services-grid">
-            
             <div class="service-cell">
                 <div class="service-num">01</div>
                 <h3>Mixing</h3>
                 <p>Balancing tracks for clarity, depth, and stereo width. Ensuring every element sits perfectly.</p>
             </div>
-
             <div class="service-cell">
                 <div class="service-num">02</div>
                 <h3>Mastering</h3>
                 <p>The final polish. Optimizing loudness and frequency balance for all streaming platforms.</p>
             </div>
-
             <div class="service-cell">
                 <div class="service-num">03</div>
                 <h3>Post Production</h3>
                 <p>Audio repair, dialogue editing, and sound design for video, podcasts, and film projects.</p>
             </div>
-
             <div class="service-cell">
                 <div class="service-num">04</div>
                 <h3>Ghost Writing</h3>
                 <p>Composition and lyrical assistance tailored to your vision. Melodic hooks to full arrangements.</p>
             </div>
-
         </div>
     </section>
 
@@ -747,7 +725,6 @@
             <div style="font-family:var(--font-head); font-size:2rem; line-height:1.2; color:var(--dim)">
                 READY TO<br><span style="color:var(--text)">UPGRADE YOUR SOUND?</span>
             </div>
-            
             <div class="form-box">
                 <form action="https://formspree.io/f/xpwvrndn" method="POST">
                     <input type="text" name="name" placeholder="NAME" required>
@@ -761,27 +738,28 @@
 
 </main>
 
-<!-- API SCRIPT -->
 <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 <script>
     // 1. Accordion Logic
-    function toggleRow(element) {
-        // Remove active class from all other rows
-        document.querySelectorAll('.data-row').forEach(row => {
-            if(row !== element) {
-                row.classList.remove('active');
+    function toggleRow(row) {
+        // Toggle the clicked row
+        row.classList.toggle('active');
+        
+        // Optional: Close others if you want only one open at a time
+        document.querySelectorAll('.data-row').forEach(otherRow => {
+            if(otherRow !== row) {
+                otherRow.classList.remove('active');
             }
         });
-        // Toggle the clicked row
-        element.classList.toggle('active');
     }
 
-    // 2. Spotify API Logic (Standard)
+    // 2. Spotify API Logic
     const spotifyControllers = [];
     window.onSpotifyIframeApiReady = (IFrameAPI) => {
         const elements = document.querySelectorAll('.spotify-embed');
         elements.forEach(element => {
             const uri = element.getAttribute('data-uri');
+            // Height 152 matches the compact player
             const options = { uri: uri, width: '100%', height: '152', theme: 'dark' };
             const callback = (EmbedController) => {
                 spotifyControllers.push(EmbedController);
